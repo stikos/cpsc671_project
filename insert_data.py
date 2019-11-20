@@ -49,7 +49,6 @@ def insert(db_name, cursor, db_conn, data_file, datetime_file):
     # Read the data file line by line and create the respective records.
     # I'll try to parse the data once and create all the records
     data = list(map(lambda x: x.split(","), open(data_file, 'r').readlines()))
-    entries = []
 
     # Fetch the country (Greece) UID to create the geolocations later
     cursor.execute("SELECT ctr_uid FROM country")
@@ -59,8 +58,9 @@ def insert(db_name, cursor, db_conn, data_file, datetime_file):
     cursor.execute("SELECT wvl_uid FROM weather_variable")
     wv_id = cursor.fetchall()[0][0]
 
-    for idx, record in enumerate(data):
-        print("{} out of {} records inserted".format(idx, len(data)), end='\r')
+    for idx1, record in enumerate(data):
+        entries = []
+        print("{} out of {} records inserted".format(idx1, len(data)), end='\r')
         latitude = float(record[0])
         longitude = float(record[1])
 
@@ -85,10 +85,10 @@ def insert(db_name, cursor, db_conn, data_file, datetime_file):
         # Then create a city record based on that geolocation using geopy
         city(latitude, longitude, cursor, db_conn, ALTITUDE, country_id, geo_id)
 
-        for idx, measurement in enumerate(record[2:]):
+        for idx2, measurement in enumerate(record[2:]):
             entries.append((wv_id,
-                            dt_list[idx-1][1],
-                            dt_list[idx-1][0],
+                            dt_list[idx2-1][1],
+                            dt_list[idx2-1][0],
                             geo_id,
                             ALTITUDE,
                             float(measurement),

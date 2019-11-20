@@ -26,8 +26,6 @@ def city(latitude, longitude, cursor, db_conn, ALTITUDE, country_id, geo_id):
         print(e)
         return None
 
-    # TODO: check return values, could be None, 1, or list
-
     # Create a city record, if it does not exist
     city_id = None
     try:
