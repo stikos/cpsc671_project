@@ -18,7 +18,7 @@ geolocator = Nominatim(scheme="http")
 def city(latitude, longitude, cursor, db_conn, ALTITUDE, country_id, geo_id):
     try:
         city = geolocator.reverse(','.join([str(latitude), str(longitude)]), language='en', timeout=3)
-        if "city" in city.raw["address"]:
+        if "address" in city.raw and "city" in city.raw["address"]:
             city = city.raw["address"]["city"]
         else:
             city = "Undefined"

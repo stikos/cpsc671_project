@@ -6,11 +6,13 @@ Desc:       Database creation
 """
 
 import configparser
+import os
 import mysql.connector as mysql
 
 from create_db import create
 from create_tables import tables
 from insert_data import insert
+from insert_patterns import patterns
 config = configparser.ConfigParser()
 config.read('config.ini')
 NAME = config['DB']['name']
@@ -38,6 +40,10 @@ if __name__ == "__main__":
     db_conf["database"] = NAME
     db_conn = mysql.connect(**db_conf)
     cursor = db_conn.cursor()
-    tables(NAME, cursor, db_conn, script_file=TABLES)
-    insert(NAME, cursor, db_conn, data_file="temperature_data.txt", datetime_file="datetime.txt")
-
+    tables(cursor, db_conn, script_file=TABLES)
+    insert(cursor,
+           db_conn,
+           data_files=["temperature_data.txt", "pressure_data.txt"],
+           datetime_file="datetime.txt")
+    files = os.listdir("pattern_data")
+    patterns(cursor, db_conn, files)
