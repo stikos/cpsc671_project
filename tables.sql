@@ -12,8 +12,8 @@ SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `raw_measurement` (
     `raw_m_uid` INTEGER NOT NULL AUTO_INCREMENT,
     `wvl_uid` INTEGER NOT NULL,
-    `time` TINYTEXT NOT NULL,
-    `date` TINYTEXT NOT NULL,
+    `date` DATE NOT NULL,
+    `time` TIME NOT NULL,
     `geol_uid` INTEGER NOT NULL,
     `height` INTEGER NOT NULL,
     `vector_val` FLOAT NOT NULL,
@@ -23,8 +23,8 @@ CREATE TABLE `raw_measurement` (
 
 CREATE TABLE `geolocation` (
     `geol_uid` INTEGER NOT NULL AUTO_INCREMENT,
-    `lat` TINYTEXT NOT NULL,
-    `lon` TINYTEXT NOT NULL,
+    `lat` FLOAT NOT NULL,
+    `lon` FLOAT NOT NULL,
     `altitude` INTEGER NOT NULL,
     `ctr_uid` INTEGER NOT NULL,
     PRIMARY KEY (`geol_uid`)
@@ -69,7 +69,7 @@ CREATE TABLE `pattern_class` (
 CREATE TABLE `result_position` (
     `res_pos_uid` INTEGER NOT NULL AUTO_INCREMENT,
     `ptrn_id` INTEGER NOT NULL,
-    `seq_id` INTEGER NOT NULL,
+    `wvl_uid` INTEGER NOT NULL,
     `position` INTEGER NOT NULL,
     PRIMARY KEY (`res_pos_uid`)
 );
