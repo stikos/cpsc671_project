@@ -31,6 +31,15 @@ def patterns(cursor, db_conn, files):
         print("Inserting {}".format(filename))
         file_type, city, class_type = filename.split("_")
 
+        # Find geolocation uid
+        geolocation = 0
+        try:
+            query = "SELECT geol_uid FROM city WHERE LOWER(name) = %s"
+            cursor.execute(query, [city])
+            geolocation = cursor.fetchone()[0]
+        except Exception as e:
+            print(e)
+
         # First count how many are already inserted to
         # make sure primary_key gets properly incremented
         num_of_pat = 0
@@ -50,14 +59,14 @@ def patterns(cursor, db_conn, files):
 
             for idx, row in enumerate(input_data):
                 if idx > 1:
-                    final_data.append((int(row[0]) + num_of_pat, row[1], row[2], row[3],  "0"))
+                    final_data.append((int(row[0]) + num_of_pat, row[1], row[2], row[3],  geolocation))
 
         cursor.executemany(query, final_data)
         db_conn.commit()
 
 
         # Insert positions
-        query = "INSERT INTO result_position(ptrn_id, seq_id, position)" \
+        query = "INSERT INTO result_position(ptrn_id, wvl_uid, position)" \
                 "VALUES (%s, %s, %s)"
 
         for filename in [x for x in files if "positions" in x]:
