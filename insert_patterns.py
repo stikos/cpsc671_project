@@ -36,7 +36,7 @@ def patterns(cursor, db_conn, files):
         try:
             query = "SELECT geol_uid FROM city WHERE LOWER(name) = %s"
             cursor.execute(query, [city])
-            geolocation = cursor.fetchone()[0]
+            geolocation = cursor.fetchall()[0][0]
         except Exception as e:
             print(e)
 

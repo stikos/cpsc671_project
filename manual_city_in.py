@@ -22,7 +22,7 @@ def manual_city(cursor, db_conn):
             # Fetch the UID for possible city creation
             cursor.execute("SELECT geol_uid FROM geolocation WHERE lon = %s AND lat = %s",
                            [ct[1], ct[0]])
-            geo_id = cursor.fetchone()[0]
+            geo_id = cursor.fetchall()[0][0]
             city(ct[1], ct[0], cursor, db_conn, 2, 1, geo_id, force=names[idx-1])
 
     except Exception as e:
