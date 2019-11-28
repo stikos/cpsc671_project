@@ -88,7 +88,7 @@ def insert(cursor, db_conn, data_files, datetime_file):
             cursor.execute("SELECT geol_uid FROM geolocation WHERE lon = %s AND lat = %s",
                            [longitude,
                             latitude])
-            geo_id = cursor.fetchall()[0][0]
+            geo_id = cursor.fetchone[0]
 
         except Exception as e:
             print(e)

@@ -15,17 +15,20 @@ geopy.geocoders.options.default_ssl_context = ctx
 geolocator = Nominatim(scheme="http")
 
 
-def city(latitude, longitude, cursor, db_conn, ALTITUDE, country_id, geo_id):
-    try:
-        city = geolocator.reverse(','.join([str(latitude), str(longitude)]), language='en', timeout=3)
-        if "address" in city.raw and "city" in city.raw["address"]:
-            city = city.raw["address"]["city"]
-        else:
-            city = "Undefined"
-    except Exception as e:
-        print(e)
-        return None
+def city(latitude, longitude, cursor, db_conn, ALTITUDE, country_id, geo_id, force=None):
+    if not force:
+        try:
+            city = geolocator.reverse(','.join([str(latitude), str(longitude)]), language='en', timeout=3)
+            if "address" in city.raw and "city" in city.raw["address"]:
+                city = city.raw["address"]["city"]
+            else:
+                city = "Undefined"
+        except Exception as e:
+            print(e)
+            return None
 
+    else:
+        city = force
     # Create a city record, if it does not exist
     city_id = None
     try:
