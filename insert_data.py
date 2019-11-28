@@ -51,7 +51,7 @@ def insert(cursor, db_conn, data_files, datetime_file):
 
     # Create a list of all datatime objects as tuples in a list, preserving the order
     with open(datetime_file, "r") as dt:
-        dt_list = list(map(lambda x: ('-'.join([x[6:8], x[4:6], x[:4]]), x[8:-2]), dt.readlines()))
+        dt_list = list(map(lambda x: ('-'.join([x[:4], x[4:6], x[6:8]]), ':'.join([x[8:].strip('\n'), "00:00"])), dt.readlines()))
 
     # Read the data file line by line and create the respective records.
     # I'll try to parse the data once and create all the records
@@ -98,23 +98,23 @@ def insert(cursor, db_conn, data_files, datetime_file):
 
         for idx2, measurement in enumerate(record[2:]):
             t_entries.append((t_id,
-                              dt_list[idx2 - 1][1],
                               dt_list[idx2 - 1][0],
+                              dt_list[idx2 - 1][1],
                               geo_id,
                               ALTITUDE,
                               float(measurement),
                               "Unspecified"))
 
             p_entries.append((p_id,
-                              dt_list[idx2 - 1][1],
                               dt_list[idx2 - 1][0],
+                              dt_list[idx2 - 1][1],
                               geo_id,
                               ALTITUDE,
                               float(p_data[idx1][idx2 - 1]),
                               "Unspecified"))
 
         try:
-            query = "INSERT INTO raw_measurement(wvl_uid, time, date, geol_uid, height, vector_val, vector_dir)" \
+            query = "INSERT INTO raw_measurement(wvl_uid, date, time, geol_uid, height, vector_val, vector_dir)" \
                     "VALUES (%s, %s, %s, %s, %s, %s, %s)"
             cursor.executemany(query, t_entries)
             db_conn.commit()
