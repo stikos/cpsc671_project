@@ -97,14 +97,15 @@ def insert(cursor, db_conn, data_files, datetime_file):
         city(latitude, longitude, cursor, db_conn, ALTITUDE, country_id, geo_id)
 
         for idx2, measurement in enumerate(record[2:]):
+            # temperature data
             t_entries.append((t_id,
                               dt_list[idx2 - 1][0],
                               dt_list[idx2 - 1][1],
                               geo_id,
                               ALTITUDE,
-                              float(measurement),
+                              float(measurement/10),            # need to divide by 10 because of data format
                               "Unspecified"))
-
+            # pressure data
             p_entries.append((p_id,
                               dt_list[idx2 - 1][0],
                               dt_list[idx2 - 1][1],
