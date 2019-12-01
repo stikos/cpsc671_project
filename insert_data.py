@@ -71,7 +71,7 @@ def insert(cursor, db_conn, data_files, datetime_file):
     for idx1, record in enumerate(t_data):
         t_entries = []  # temperature data
         p_entries = []  # pressure data
-        print("{} out of {} records inserted".format(idx1, len(t_data)), end='\r')
+        print("{} out of {} records inserted".format(idx1+1, len(t_data)), end='\r')
         latitude = float(record[0])
         longitude = float(record[1])
 
@@ -99,19 +99,19 @@ def insert(cursor, db_conn, data_files, datetime_file):
         for idx2, measurement in enumerate(record[2:]):
             # temperature data
             t_entries.append((t_id,
-                              dt_list[idx2 - 1][0],
-                              dt_list[idx2 - 1][1],
+                              dt_list[idx2][0],
+                              dt_list[idx2][1],
                               geo_id,
                               ALTITUDE,
                               float(measurement/10),            # need to divide by 10 because of data format
                               "Unspecified"))
             # pressure data
             p_entries.append((p_id,
-                              dt_list[idx2 - 1][0],
-                              dt_list[idx2 - 1][1],
+                              dt_list[idx2][0],
+                              dt_list[idx2][1],
                               geo_id,
                               ALTITUDE,
-                              float(p_data[idx1][idx2 - 1]),
+                              float(p_data[idx1][idx2]),
                               "Unspecified"))
 
         try:

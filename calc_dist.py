@@ -2,7 +2,7 @@
 """
 Author:     Konstantinos Liosis
 File:       calc_dist.py
-Desc:
+Desc:       calculate the square area around a point on the map
 """
 
 import math
@@ -23,8 +23,16 @@ def dist(point: tuple, distance: float):
 
     # https://gis.stackexchange.com/questions/142326/calculating-longitude-length-in-miles
     coef = DEG2DIST
-    d_lon = abs(point[1] - distance / coef)
-    coef = coef * math.cos(math.radians(point[0]))
     d_lat = abs(point[0] - distance / coef)
+    coef = coef * math.cos(math.radians(point[0]))
+    d_lon = abs(point[1] - distance / coef)
+    latN = point[0] + (point[0] - d_lat)
+    latS = d_lat
+    lonE = point[1] + (point[1] - d_lon)
+    lonW = d_lon
 
-    return point[0] + (point[0] - d_lat), d_lat, point[1] + (point[1] - d_lon), d_lon
+    # invoke map_img to create image. Greece is hardcoded because of the nature of our data
+    # Future feature, module issues
+    # map_img([latN, latN, latS, latS], [lonE, lonW, lonE, lonW], "Greece")
+
+    return latN, latS, lonE, lonW

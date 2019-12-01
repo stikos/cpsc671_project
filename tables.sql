@@ -56,6 +56,7 @@ CREATE TABLE `pattern` (
     `length` INTEGER NOT NULL,
     `occurences` INTEGER NOT NULL,
     `geol_uid` INTEGER NOT NULL,
+    `ptrn_c_uid` INTEGER NOT NULL,
     PRIMARY KEY (`ptrn_id`)
 );
 

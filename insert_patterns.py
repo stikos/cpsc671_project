@@ -30,6 +30,7 @@ def patterns(cursor, db_conn, files):
     for filename in [x for x in files if "positions" not in x]:
         print("Inserting {}".format(filename))
         file_type, city, class_type = filename.split("_")
+        class_type = 1 if class_type == '5' else 2
 
         # Find geolocation uid
         geolocation = 0
@@ -50,8 +51,8 @@ def patterns(cursor, db_conn, files):
         except Exception as e:
             print(e)
 
-        query = "INSERT INTO pattern(ptrn_id, ptrn, length, occurences, geol_uid)" \
-                "VALUES (%s, %s, %s, %s, %s)"
+        query = "INSERT INTO pattern(ptrn_id, ptrn, length, occurences, geol_uid, ptrn_c_uid)" \
+                "VALUES (%s, %s, %s, %s, %s, %s)"
 
         final_data = []
         with open("pattern_data/"+filename, 'r') as csv_file:
@@ -59,7 +60,7 @@ def patterns(cursor, db_conn, files):
 
             for idx, row in enumerate(input_data):
                 if idx > 1:
-                    final_data.append((int(row[0]) + num_of_pat, row[1], row[2], row[3],  geolocation))
+                    final_data.append((int(row[0]) + num_of_pat, row[1], row[2], row[3],  geolocation, class_type))
 
         cursor.executemany(query, final_data)
         db_conn.commit()
