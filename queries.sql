@@ -62,3 +62,28 @@ BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
+DROP PROCEDURE IF EXISTS get_yearly_avg $$
+CREATE PROCEDURE get_yearly_avg(IN month_in INTEGER)
+BEGIN
+    SELECT AVG(vector_val), YEAR(date)
+    FROM raw_measurement
+    WHERE
+          MONTH(date) = month_in
+          AND wvl_uid = 1
+    GROUP BY YEAR(date);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS get_monthly_avg $$
+CREATE PROCEDURE get_monthly_avg(IN day_in INTEGER, IN month_in INTEGER)
+BEGIN
+    SELECT AVG(vector_val), YEAR(date)
+    FROM raw_measurement
+    WHERE DAY(date) = day_in
+          AND MONTH(date) = month_in
+          AND wvl_uid = 1
+    GROUP BY YEAR(date);
+END$$
+DELIMITER ;

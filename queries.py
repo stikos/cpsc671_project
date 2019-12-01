@@ -73,3 +73,46 @@ def cities(db_conn):
     cursor.callproc("get_cities")
     cities = [x[0] for x in [res.fetchall() for res in cursor.stored_results()][0]]
     print('\n', *cities, sep="\n")
+
+def yearly_avg(db_conn):
+    #     docstring
+    cursor = db_conn.cursor()
+
+    data = []
+    res = {}
+    for month in range(1, 13):
+        try:
+            cursor.callproc("get_yearly_avg", [month])
+            data.append([x for x in [res.fetchall() for res in cursor.stored_results()][0]])
+        except Exception as e:
+            print(e)
+
+    for item in data:
+        for rec in item:
+            if rec[1] not in res:
+                res[rec[1]] = []
+            res[rec[1]].append(rec[0])
+
+    return res
+
+
+def monthly_avg(db_conn, month):
+    #     docstring
+    cursor = db_conn.cursor()
+
+    data = []
+    res = {}
+    for day in range(1, 31):
+        try:
+            cursor.callproc("get_monthly_avg", [day, month])
+            data.append([x for x in [res.fetchall() for res in cursor.stored_results()][0]])
+        except Exception as e:
+            print(e)
+
+    for item in data:
+        for rec in item:
+            if rec[1] not in res:
+                res[rec[1]] = []
+            res[rec[1]].append(rec[0])
+
+    return res

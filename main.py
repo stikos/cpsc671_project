@@ -14,6 +14,7 @@ from create_tables import tables
 from insert_data import insert
 from insert_patterns import patterns
 from manual_city_in import manual_city
+from temp_graph import draw
 import queries
 
 config = configparser.ConfigParser()
@@ -98,4 +99,10 @@ if __name__ == "__main__":
                 print("1. Monthly",
                       "2. Yearly", sep="\n")
                 choice = int(input("Select by number: "))
+                month = None
+
+                if choice == 1:
+                    month = int(input("Select month (1-12): "))
+
+                draw(db_conn, choice, month)
                 # TODO
