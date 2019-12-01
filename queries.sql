@@ -25,7 +25,7 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS get_top_5 $$
 CREATE PROCEDURE get_top_5(IN var_type_uid INTEGER, IN points TEXT)
 BEGIN
-    SELECT DISTINCT temp2.ptrn_id, temp2.ptrn, temp2.occurences
+    SELECT DISTINCT temp2.ptrn_id, temp2.ptrn, COUNT(temp2.geol_uid)
     FROM (
         SELECT *
         FROM (
@@ -33,7 +33,8 @@ BEGIN
               FROM pattern, result_position
               WHERE pattern.ptrn_id = result_position.ptrn_id AND result_position.wvl_uid = var_type_uid) AS temp1
         WHERE  FIND_IN_SET(CAST(temp1.geol_uid AS CHAR), points) > 0) AS temp2
-    ORDER BY occurences DESC LIMIT 5;
+    GROUP BY temp2.ptrn_id
+    ORDER BY COUNT(temp2.geol_uid) DESC LIMIT 5;
 END$$
 DELIMITER ;
 
