@@ -54,16 +54,17 @@ def top5(db_conn, wvl, points):
 #     docstring
     cursor = db_conn.cursor()
     cursor.callproc("get_top_5", [wvl, ','.join(list(map(str, points)))])
-    resu = [res.fetchall() for res in cursor.stored_results()]
-    print(resu)
+    resu = [res.fetchall() for res in cursor.stored_results()][0]
+    print("\nUID | Pattern | # Occurrences")
+    print(*resu, sep="\n")
 
 
-def avg_ptrn_len(db_conn, num_class):
+def avg_ptrn_len(db_conn, num_class, points):
 #     docstring
     cursor = db_conn.cursor()
-    cursor.callproc("get_patterns", [num_class])
+    cursor.callproc("get_patterns", [num_class, ','.join(list(map(str, points)))])
     ptrn_len = [res.fetchall()[0][0] for res in cursor.stored_results()][0]
-    print("Average pattern length")
+    print("\nAverage pattern length: {}".format(ptrn_len))
 
 
 def cities(db_conn):
@@ -71,7 +72,4 @@ def cities(db_conn):
     cursor = db_conn.cursor()
     cursor.callproc("get_cities")
     cities = [x[0] for x in [res.fetchall() for res in cursor.stored_results()][0]]
-    print(*cities, sep="\n")
-
-
-def
+    print('\n', *cities, sep="\n")

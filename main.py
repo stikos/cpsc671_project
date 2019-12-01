@@ -15,6 +15,7 @@ from insert_data import insert
 from insert_patterns import patterns
 from manual_city_in import manual_city
 import queries
+
 config = configparser.ConfigParser()
 config.read('config.ini')
 NAME = config['DB']['name']
@@ -22,7 +23,6 @@ TABLES = config['DB']['tables']
 HOST = config['HOST']['def']
 USER = config['USERS']['1']
 PASS = config['PASS']['1']
-
 
 if __name__ == "__main__":
 
@@ -60,34 +60,42 @@ if __name__ == "__main__":
 
     elif choice == 2:
         while choice not in ["exit", 'e']:
+            print("\n=======================================================")
             print("1. Square area of interest",
-                   "2. List of cities",
-                   "3. Average monthly/yearly temperature charts for Greece", sep="\n")
+                  "2. List of cities",
+                  "3. Average monthly/yearly temperature charts for Greece", sep="\n")
             choice = int(input("Select a query by number: "))
 
             if choice == 1:
                 points = queries.box(db_conn)
                 print("{} points retrieved".format(len(points)))
                 print("1. Top 5 patterns for temperature",
-                       "2. Top 5 patterns for geopotential height",
-                       "3. Average pattern length (among all variables)", sep="\n")
+                      "2. Top 5 patterns for geopotential height",
+                      "3. Average pattern length (among all variables)", sep="\n")
                 choice = int(input("Select a query by number: "))
 
                 if choice == 1:
                     queries.top5(db_conn, 1, points)
+                    continue
+
                 if choice == 2:
                     queries.top5(db_conn, 2, points)
+                    continue
+
                 if choice == 3:
-                    print("Granularity (in alphabet size):"
+                    print("Granularity (in alphabet size):",
                           "1. 5 characters",
                           "2. 10 characters", sep="\n")
                     choice = int(input("Select by number: "))
-                    queries.avg_ptrn_len(db_conn, choice)
+                    queries.avg_ptrn_len(db_conn, choice, points)
+                    continue
 
             if choice == 2:
                 queries.cities(db_conn)
+                continue
 
             if choice == 3:
                 print("1. Monthly",
-                       "2. Yearly", sep="\n")
-                choice = int(input("Select a query by number: "))
+                      "2. Yearly", sep="\n")
+                choice = int(input("Select by number: "))
+                # TODO

@@ -4,10 +4,10 @@ CREATE PROCEDURE get_box(IN latN FLOAT, IN latS FLOAT, IN lonE FLOAT, IN lonW FL
 BEGIN
     SELECT geol_uid
     FROM geolocation
-    WHERE lonW - lon >= 0
+    WHERE lonW - lon <= 0
     AND   lonE - lon >= 0
     AND   latN - lat >= 0
-    AND   latS - lat >= 0;
+    AND   latS - lat <= 0;
 END$$
 DELIMITER ;
 
@@ -25,7 +25,7 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS get_top_5 $$
 CREATE PROCEDURE get_top_5(IN var_type_uid INTEGER, IN points TEXT)
 BEGIN
-    SELECT temp2.ptrn_id, temp2.ptrn, temp2.occurences
+    SELECT DISTINCT temp2.ptrn_id, temp2.ptrn, temp2.occurences
     FROM (
         SELECT *
         FROM (
@@ -39,14 +39,18 @@ DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS get_patterns $$
-CREATE PROCEDURE get_patterns(IN num_class INTEGER)
+CREATE PROCEDURE get_patterns(IN num_class INTEGER, IN points TEXT)
 BEGIN
-    SELECT AVG(CHAR_LENGTH(pattern.ptrn))
-    FROM pattern
-    WHERE pattern.ptrn_c_uid = num_class;
+    SELECT AVG(CHAR_LENGTH(temp2.ptrn))
+    FROM (
+        SELECT temp1.ptrn
+        FROM (
+              SELECT pattern.ptrn, pattern.geol_uid
+              FROM pattern, result_position
+              WHERE pattern.ptrn_id = result_position.ptrn_id AND result_position.wvl_uid = num_class) AS temp1
+        WHERE  FIND_IN_SET(CAST(temp1.geol_uid AS CHAR), points) > 0) AS temp2;
 END$$
 DELIMITER ;
-
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS get_cities $$

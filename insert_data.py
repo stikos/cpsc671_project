@@ -99,16 +99,16 @@ def insert(cursor, db_conn, data_files, datetime_file):
         for idx2, measurement in enumerate(record[2:]):
             # temperature data
             t_entries.append((t_id,
-                              dt_list[idx2][0],
-                              dt_list[idx2][1],
+                              dt_list[idx2-1][0],
+                              dt_list[idx2-1][1],
                               geo_id,
                               ALTITUDE,
-                              float(measurement/10),            # need to divide by 10 because of data format
+                              float(measurement)/10,            # need to divide by 10 because of data format
                               "Unspecified"))
             # pressure data
             p_entries.append((p_id,
-                              dt_list[idx2][0],
-                              dt_list[idx2][1],
+                              dt_list[idx2-1][0],
+                              dt_list[idx2-1][1],
                               geo_id,
                               ALTITUDE,
                               float(p_data[idx1][idx2]),
