@@ -45,7 +45,33 @@ def box(db_conn):
 
     args = list(dist(user_in, radius))
     cursor.callproc("get_box", args)
-    points = [res.fetchall() for res in cursor.stored_results()]
+    points = [x[0] for x in [res.fetchall() for res in cursor.stored_results()][0]]
 
     return points
 
+
+def top5(db_conn, wvl, points):
+#     docstring
+    cursor = db_conn.cursor()
+    cursor.callproc("get_top_5", [wvl, ','.join(list(map(str, points)))])
+    resu = [res.fetchall() for res in cursor.stored_results()]
+    print(resu)
+
+
+def avg_ptrn_len(db_conn, num_class):
+#     docstring
+    cursor = db_conn.cursor()
+    cursor.callproc("get_patterns", [num_class])
+    ptrn_len = [res.fetchall()[0][0] for res in cursor.stored_results()][0]
+    print("Average pattern length")
+
+
+def cities(db_conn):
+#     docstring
+    cursor = db_conn.cursor()
+    cursor.callproc("get_cities")
+    cities = [x[0] for x in [res.fetchall() for res in cursor.stored_results()][0]]
+    print(*cities, sep="\n")
+
+
+def
