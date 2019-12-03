@@ -8,6 +8,7 @@ Desc:       Data entry
 from create_city import city
 
 ALTITUDE = 2  # Fixed value at the moment
+KELVIN = 273.15
 
 
 def insert(cursor, db_conn, data_files, datetime_file):
@@ -103,7 +104,7 @@ def insert(cursor, db_conn, data_files, datetime_file):
                               dt_list[idx2-1][1],
                               geo_id,
                               ALTITUDE,
-                              float(measurement)/10,            # need to divide by 10 because of data format
+                              float(measurement) - KELVIN,            # need to divide by 10 because of data format
                               "Unspecified"))
             # pressure data
             p_entries.append((p_id,

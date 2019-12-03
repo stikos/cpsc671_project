@@ -25,7 +25,7 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS get_top_5 $$
 CREATE PROCEDURE get_top_5(IN var_type_uid INTEGER, IN points TEXT)
 BEGIN
-    SELECT DISTINCT temp2.ptrn_id, temp2.ptrn, COUNT(temp2.geol_uid)
+    SELECT temp2.ptrn_id, temp2.ptrn, COUNT(temp2.geol_uid)
     FROM (
         SELECT *
         FROM (
