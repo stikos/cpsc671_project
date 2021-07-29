@@ -34,7 +34,7 @@ The design of the database should both reflect the needs of the weather scientis
 The first problem that had to be tackled was writing a script to automate the loading of both “raw” weather measurements and pattern data into the database. The data came in a variety of formats, from csv files to partially unstructured text files. A great amount of processing was required to create the individual attributes of the database in the correct form.
 A part of the process that added significant delay was the use of a reverse geolocation API (OpenStreetMap’s Nominatim through the **geopy** module), in order to populate the city table by looking only at the coordinates that were provided in the data.
 
-### Queery creation
+### Query creation
 The value of this tool lies in its ability to provide to the meteorologist the exact pieces of information that are needed. While there’s potentially an abundance of useful queries one can come up with to satisfy the needs of this domain’s expert, for the scope of the courses needs the created queries are rather limited, yet insightful.
 One major design decision regarding the queries themselves was defining them as **stored procedures**. There are several reasons behind that:
 * It helps distinguish the data functionality from the application, resulting in more comprehensible and “clean” code
